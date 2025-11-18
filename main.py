@@ -14,6 +14,7 @@ if __name__ == "__main__":
     parser.add_argument("--target_model_name", type=str, default="gpt-4o", help="Target Model name.")
     parser.add_argument("--early_stop", type=bool, default=True, help="early stop if the judge LLM yields success.")
     parser.add_argument("--dynamic_modify", type=bool, default=True, help="apply dynamic modification.")
+    parser.add_argument("--pre_attack_data_path_file", type=str, help="skip preattack re-generation and load from file")
     args = parser.parse_args()
     
     pre_attack_config = PreAttackConfig(
@@ -22,7 +23,7 @@ if __name__ == "__main__":
         behavior_csv=args.behavior)
     pre_attacker = PreAttack(pre_attack_config)
     
-    pre_attack_data_path = pre_attacker.infer(args.questions)
+    pre_attack_data_path = args.pre_attack_data_path_file if args.pre_attack_data_path_file else pre_attacker.infer(args.questions)
     print(f"pre-attack data path: {pre_attack_data_path}")
 
     in_attack_config = InAttackConfig(
